@@ -3,7 +3,7 @@ import pandas as pd
 def clean_data(df):
     df = df.copy()
 
-    # Remove duplicates
+    # Remove duplicates (entire row)
     df.drop_duplicates(inplace=True)
 
     # Trim whitespace from strings
@@ -14,5 +14,13 @@ def clean_data(df):
 
     # Standardize column names
     df.columns = [col.strip().lower().replace(" ", "_") for col in df.columns]
+
+    # Remove duplicate names (keep the first occurrence)
+    if 'name' in df.columns:
+        df = df.drop_duplicates(subset='name', keep='first')
+
+    # Remove duplicate email ids (keep the first occurrence)
+    if 'email' in df.columns:
+        df = df.drop_duplicates(subset='email', keep='first')
 
     return df
