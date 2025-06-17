@@ -22,5 +22,12 @@ def clean_data(df):
     # Remove duplicate email ids (keep the first occurrence)
     if 'email' in df.columns:
         df = df.drop_duplicates(subset='email', keep='first')
+    # Convert negative ages to positive
+    # Fix age column: ensure positive integers
+    if 'age' in df.columns:
+        df['age'] = pd.to_numeric(df['age'], errors='coerce')  # convert to numeric, NaN if invalid
+        df['age'] = df['age'].abs()  # convert negative to positive
+        df = df[df['age'] <= 100]                               # remove age > 100
+        df['age'] = df['age'].fillna(1).astype(int) 
 
     return df
